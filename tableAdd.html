@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>个体详情</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .white-space{white-space:nowrap;}
+    </style>
+</head>
+<body class="bg-light">
+<main class="container">
+    <div class="table-responsive">
+        <table id="sst" class="table table-bordered text-center ">
+            <thead>
+            <tr class="table-secondary">
+                <th scope="col">年月</th>
+                <th scope="col" class="white-space">进件数量</th>
+                <th scope="col" class="white-space">利息收入</th>
+                <th scope="col">逾期</th>
+                <th scope="col">不良</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td scope="row" class="white-space">2018年5月</td>
+                <td>100</td>
+                <td>10000000</td>
+                <td></td>
+                <td>10000000</td>
+            </tr>
+            <tr>
+                <td scope="row">2018年6月</td>
+                <td>100</td>
+                <td>55</td>
+                <td></td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td scope="row">2018年7月</td>
+                <td>250</td>
+                <td>78</td>
+                <td>1</td>
+                <td>5</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td scope="row">总计</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</main>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+
+    /*
+         * 表格求和。
+         * tables 表示当前求和的表格（id）--> #name
+         * startRow  表示开始的行数
+         *  startColumn  表示开始的列数
+         *  endColumn   表示求和结束的列数
+         *  decimal  表示是否有小数（使用toFixed处理小数） true OR false
+         *  digit 表示小数位数 默认两位
+         *  === 目前只有列相加，后续补充行相加
+         * */
+
+    var table = [1,2,3,4] //添加需要计算的列数
+    function sumFun(){
+        table.forEach(function(item,index){
+            sum('#sst',1,item,false)
+        })
+    }
+    sumFun();
+    function sum(tables,startRow,startColumn,decimal,digit){
+        if(!digit){digit = 2;} //小数位数
+        var total = Number(0);
+        var trs = $(tables).find('tr');
+        var end = $(tables).find('tr').length - 1; //直接获取几行tr
+        for(var i=startRow; i<end; i++){
+            var tr = trs[i]
+            var tds = $(tr).find('td')
+            var t = Number($(tds[startColumn]).html()); //表格为空会转化为0
+            console.log(t)
+            if(!t) { // 判空 NAN 表格为空时
+                if(t !== Number(0)){
+                    alert("有非数字，请检查");
+                    $(trs[end]).find('td')[startColumn].innerHTML = '-'
+                    return
+                }
+            }
+            total += t
+        }
+        total = String(total); //小数精度问题 -》 转为字符串
+        decimal === true ? (total = total.toFixed(digit)) : total
+        $(trs[end]).find('td')[startColumn].innerHTML = total
+    }
+</script>
+</body>
+</html>
